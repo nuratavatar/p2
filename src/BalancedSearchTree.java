@@ -19,11 +19,13 @@
  * Implements methods from SearchTreeADT given for assignment.
  * @param <T> generic comparable object for use as keys in search tree.
  */
-public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeADT<T> {
+public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeADT<T> 
+{
     protected int numNodes; //Keeps track of the number of nodes in the tree
     protected Treenode<T> root; //Keeps track of the tree's root node
     
-    public BalancedSearchTree() {
+    public BalancedSearchTree() 
+    {
         numNodes = 0;
     }
     
@@ -32,15 +34,28 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      * Class for nodes in the binary search tree
      * @param <K> generic comparable object for key
      */
-	protected class Treenode<K extends Comparable<K>> {
-	    K key;
-        Treenode<K> left;
-        Treenode<K> right;
+	protected class Treenode<K extends Comparable<K>> 
+	{
+	    K key; //treenode key
+        Treenode<K> left; //left child
+        Treenode<K> right; //right child
         
-		public Treenode(K item) {
+        /**
+         * Basic treenode constructor
+         * @param item: key
+         */
+		public Treenode(K item)
+		{
 			this(item,null,null);
 		}
-		public Treenode(K item, Treenode<K> left, Treenode<K> right) {
+		/**
+		 * Overloaded treenode constructor
+		 * @param item: key
+		 * @param left: left child
+		 * @param right: right child
+		 */
+		public Treenode(K item, Treenode<K> left, Treenode<K> right) 
+		{
 			key = item;
 			this.left = left;
 			this.right = right;
@@ -84,69 +99,145 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * Returns a string containing the keys of each node in the tree in ascending order seperated by commas
 	 */
-	public String inAscendingOrder() {
-	    if (numNodes == 0) return "";
+	public String inAscendingOrder()
+	{
+	    if (numNodes == 0)
+	    {
+	        return "";
+	    }
         return ascendingHelper(root);
     }
     
-    private String ascendingHelper(Treenode<T> node) {
-        String val = "";
-        if (node.left != null) val = ascendingHelper(node.left);
-        val += node.key.toString() + ",";
-        if (node.right != null) val += ascendingHelper(node.right);
-        return val;
+	/**
+	 * Helper method for inAscendingOrder() method
+	 * @param node: the node being visited
+	 * @return A string of the keys of the nodes up to "node" in order
+	 */
+    private String ascendingHelper(Treenode<T> node)
+    {
+        String result = "";
+        if (node.left != null) 
+        {
+        result = ascendingHelper(node.left);
+        }
+        result += node.key.toString() + ",";
+        if (node.right != null)
+        {
+        result += ascendingHelper(node.right);
+        }
+        return result;
     }
 
 	/**
 	 * Returns true if the tree is empty and false otherwise
 	 */
-	public boolean isEmpty() {
-        if (numNodes == 0) return true;
+	public boolean isEmpty() 
+	{
+        if (numNodes == 0) 
+        {
+        return true;
+        }
         return false;
     }
 
 	/**
 	 * Returns the height of the tree
 	 */
-	public int height() {
-        if (isEmpty()) return 0;
-        else if (root.right == null && root.left == null) return 1;
-        else return Math.max(heightHelper(root.right), heightHelper(root.left));
+	public int height() 
+	{
+        if (isEmpty())
+        {
+        return 0;
+        }
+        else if (root.right == null && root.left == null) 
+        {
+            return 1;
+        }
+        else
+        {
+            return Math.max(heightHelper(root.right), heightHelper(root.left));
+        }
     }
     
-    private int heightHelper(Treenode<T> node) {
-        if (node == null) return 0;
-        else return 1 + Math.max(heightHelper(node.right), heightHelper(node.left));
+	/**
+	 * Helper method for height
+	 * @param node
+	 * @return
+	 */
+    private int heightHelper(Treenode<T> node) 
+    {
+        if (node == null) 
+        {
+            return 0;
+        }
+        else 
+        {
+            return 1 + Math.max(heightHelper(node.right), heightHelper(node.left));
+        }
     }
 
 	/**
 	 * Returns true if the tree contains a node with item as its key
 	 */
 	public boolean lookup(T item) {
-	    if (item == null) throw new IllegalArgumentException();
-        if (isEmpty()) return false;
-        else {
+	    if (item == null) 
+        {
+	        throw new IllegalArgumentException();
+        }
+        if (isEmpty())
+        {
+            return false;
+        }
+        else 
+        {
             Treenode<T> currNode = root;
             boolean found = false;
-            while (!found && currNode != null) {
-                if (currNode.key.compareTo(item) == 0) found = true;
-                else if (currNode.key.compareTo(item) > 0) currNode = currNode.left;
-                else currNode = currNode.right;
+            while (!found && currNode != null) 
+            {
+                if (currNode.key.compareTo(item) == 0) 
+                {
+                    found = true;
+                }
+                else if (currNode.key.compareTo(item) > 0)
+                {
+                    currNode = currNode.left;
+                }
+                else 
+                {
+                    currNode = currNode.right;
+                }
             }
             return found;
         }
     }
-	
-	private int balanceFactor() {
-        if (isEmpty()) return 0;
+	/**
+	 * Returns the balance factor of the root
+	 * @return balance factor of root
+	 */
+	private int balanceFactor() 
+	{
+        if (isEmpty())
+        {
+        return 0;
+        }
         return subTreeHeight(root.left) - subTreeHeight(root.right);
     }
     
+	/**
+	 * Returns the balance factor of a given node
+	 * @param node: the node in question
+	 * @return the balance factor of node
+	 */
     private int balanceFactor(Treenode<T> node) {
         if (isEmpty()) return 0;
         return subTreeHeight(node.left) - subTreeHeight(node.right);
     }
     
+    /**
+     * Returns the height of a subtree starting with "node"
+     * @param node: the root of the subtree
+     * @return the height of the subtree with "node" as a root
+     */
     private int subTreeHeight(Treenode<T> node) {
         if (node == null) return 0;
         return 1 + Math.max(subTreeHeight(node.left), subTreeHeight(node.right));
