@@ -1,3 +1,5 @@
+import BalancedSearchTree.Treenode;
+
 ///////////////////////////////////////////////////////////////////////////////
 // Title:            P2 (Implemented Using AVL Tree)
 // Files:            BalancedSearchTree.java, TestSearchTree.java, SearchTreeADT.java
@@ -22,6 +24,10 @@
 public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeADT<T> {
     protected int numNodes; //Keeps track of the number of nodes in the tree
     protected Treenode<T> root; //Keeps track of the tree's root node
+    
+    public BalancedSearchTree() {
+        numNodes = 0;
+    }
     
     /**
      * @author tmand
@@ -81,36 +87,70 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Returns a string containing the keys of each node in the tree in ascending order seperated by commas
 	 */
 	public String inAscendingOrder() {
-		//TODO : must return comma separated list of keys in ascending order
-		return "" ;
-	}
+        return ascendingHelper(root);
+    }
+    
+    private String ascendingHelper(Treenode<T> node) {
+        String val = "";
+        if (node.left != null) val = ascendingHelper(node.left);
+        val += node.key.toString() + ",";
+        if (node.right != null) val += ascendingHelper(node.right);
+        return val;
+    }
 
 	/**
 	 * Returns true if the tree is empty and false otherwise
 	 */
 	public boolean isEmpty() {
-		if(numNodes == 0)
-		{
-		    return true;
-		}
-		return false;
-	}
+        if (numNodes == 0) return true;
+        return false;
+    }
 
 	/**
 	 * Returns the height of the tree
 	 */
 	public int height() {
-		//TODO return the height of this tree
-		return 0; 
-	}
+        if (isEmpty()) return 0;
+        else if (root.right == null && root.left == null) return 1;
+        else return Math.max(heightHelper(root.right), heightHelper(root.left));
+    }
+    
+    private int heightHelper(Treenode<T> node) {
+        if (node == null) return 0;
+        else return 1 + Math.max(heightHelper(node.right), heightHelper(node.left));
+    }
 
 	/**
 	 * Returns true if the tree contains a node with item as its key
 	 */
 	public boolean lookup(T item) {
-		//TODO must return true if item is in tree, otherwise false
-		return false;
-	}
+        if (isEmpty()) return false;
+        else {
+            Treenode<T> currNode = root;
+            boolean found = false;
+            while (!found && currNode != null) {
+                if (currNode.key.compareTo(item) == 0) found = true;
+                else if (currNode.key.compareTo(item) > 0) currNode = currNode.left;
+                else currNode = currNode.right;
+            }
+        }
+        return false;
+    }
+	
+	private int balanceFactor() {
+        if (isEmpty()) return 0;
+        return subTreeHeight(root.left) - subTreeHeight(root.right);
+    }
+    
+    private int balanceFactor(Treenode<T> node) {
+        if (isEmpty()) return 0;
+        return subTreeHeight(node.left) - subTreeHeight(node.right);
+    }
+    
+    private int subTreeHeight(Treenode<T> node) {
+        if (node == null) return 0;
+        return 1 + Math.max(subTreeHeight(node.left), subTreeHeight(node.right));
+    }
 
 	/**
 	 * Inserts a new node with item as its key in the correct position
