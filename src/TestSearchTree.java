@@ -6,25 +6,19 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/////////////////////////////////////////////////////////////////////////////
-// Semester:         CS400 Spring 2018
-// PROJECT:          cs400_p2_201801
-// FILES:            TestSearchTree.java
-//                   SearchTreeADT.java
-//                   BalancedSearchTree.java
+///////////////////////////////////////////////////////////////////////////////
+//Title:            P2 (Implemented Using AVL Tree)
+//Files:            BalancedSearchTree.java, TestSearchTree.java, SearchTreeADT.java
+//Semester:         CS 400 Spring 2018
 //
-// USER:             deppeler
-//
-// Instructor:       Deb Deppeler (deppeler@cs.wisc.edu)
-// Bugs:             no known bugs, but not complete either
-//
-// 2018 Feb 8, 2018 5:13:18 PM TestSearchTree.java 
-//////////////////////////// 80 columns wide //////////////////////////////////
+//Authors:          Matt Zimmers, Tarun Mandalapu
+//Email:            tmandalapu@wisc.edu
+//Lecturer's Name:  Debra Deppeler
+//Source Credits:   https://pages.cs.wisc.edu/~deppeler/cs400/readings/AVL-Trees/index.html
+//Known Bugs:       TODO
+///////////////////////////////////////////////////////////////////////////////
 
-/**
- * @author 
- *
- */
+
 public class TestSearchTree {
 
 	SearchTreeADT<String> tree = null;

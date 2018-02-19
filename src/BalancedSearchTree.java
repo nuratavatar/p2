@@ -1,10 +1,25 @@
-// starter class for a BalancedSearchTree
-// you may implement AVL, Red-Black, 2-3 Tree, or 2-3-4 Tree
-// be sure to include in class header which tree you have implemented
-public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeADT<T> {
+///////////////////////////////////////////////////////////////////////////////
+// Title:            P2 (Implemented Using AVL Tree)
+// Files:            BalancedSearchTree.java, TestSearchTree.java, SearchTreeADT.java
+// Semester:         CS 400 Spring 2018
+//
+// Authors:          Matt Zimmers, Tarun Mandalapu
+// Email:            tmandalapu@wisc.edu
+// Lecturer's Name:  Debra Deppeler
+// Source Credits:   https://pages.cs.wisc.edu/~deppeler/cs400/readings/AVL-Trees/index.html
+// Known Bugs:       TODO
+///////////////////////////////////////////////////////////////////////////////
 
+public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeADT<T> {
+    protected int numNodes;
+    protected Treenode<T> root;
+    
 	// inner node class used to store key items and links to other nodes
 	protected class Treenode<K extends Comparable<K>> {
+	    K key;
+        Treenode<K> left;
+        Treenode<K> right;
+        
 		public Treenode(K item) {
 			this(item,null,null);
 		}
@@ -13,20 +28,42 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 			this.left = left;
 			this.right = right;
 		}
-		K key;
-		Treenode<K> left;
-		Treenode<K> right;
 	}
 
-	protected Treenode<T> root;
-
+	@SuppressWarnings("unused")
+    private void rotateRight(Treenode<T> b)
+	{
+	    Treenode<T> a = b.right;
+	    b.left = a.right;
+	    a.right = b;
+	    if(b.equals(root))
+	    {
+	        root = a;
+	    }
+	}
+	
+	@SuppressWarnings("unused")
+	private void rotateLeft(Treenode<T> a)
+	{
+	    Treenode<T> b = a.left;
+	    a.right = b.left;
+	    b.left = a;
+	    if(a.equals(root))
+	    {
+	        root = b;
+	    }
+	}
+	
 	public String inAscendingOrder() {
 		//TODO : must return comma separated list of keys in ascending order
 		return "" ;
 	}
 
 	public boolean isEmpty() {
-		//TODO return empty if there are no keys in structure
+		if(numNodes == 0)
+		{
+		    return true;
+		}
 		return false;
 	}
 
@@ -51,16 +88,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 
 		// NOTE: if you are unable to get delete implemented
 		// it will be at most 5% of the score for this program assignment
-	}
-
-
-	// HINT: define this helper method that can find the smallest key 
-	// in a sub-tree with "node" as its root
-	// PRE-CONDITION: node is not null
-	private T leftMost(Treenode<T> node) {
-		// TODO return the key value of the left most node in this subtree
-		// or return node's key if node does not have a left child
-		return node.key;
 	}
 
 }
