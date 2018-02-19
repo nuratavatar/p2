@@ -131,8 +131,8 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
                 else if (currNode.key.compareTo(item) > 0) currNode = currNode.left;
                 else currNode = currNode.right;
             }
+            return found;
         }
-        return false;
     }
 	
 	private int balanceFactor() {
