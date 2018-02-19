@@ -1,5 +1,3 @@
-import BalancedSearchTree.Treenode;
-
 ///////////////////////////////////////////////////////////////////////////////
 // Title:            P2 (Implemented Using AVL Tree)
 // Files:            BalancedSearchTree.java, TestSearchTree.java, SearchTreeADT.java
