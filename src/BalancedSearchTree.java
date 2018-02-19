@@ -85,6 +85,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Returns a string containing the keys of each node in the tree in ascending order seperated by commas
 	 */
 	public String inAscendingOrder() {
+	    if (numNodes == 0) return "";
         return ascendingHelper(root);
     }
     
@@ -122,6 +123,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Returns true if the tree contains a node with item as its key
 	 */
 	public boolean lookup(T item) {
+	    if (item == null) throw new IllegalArgumentException();
         if (isEmpty()) return false;
         else {
             Treenode<T> currNode = root;
