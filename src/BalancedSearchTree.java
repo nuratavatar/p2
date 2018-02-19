@@ -214,6 +214,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Returns the balance factor of the root
 	 * @return balance factor of root
 	 */
+	@SuppressWarnings("unused")
 	private int balanceFactor() 
 	{
         if (isEmpty())
@@ -228,8 +229,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * @param node: the node in question
 	 * @return the balance factor of node
 	 */
-    private int balanceFactor(Treenode<T> node) {
-        if (isEmpty()) return 0;
+	@SuppressWarnings("unused")
+    private int balanceFactor(Treenode<T> node) 
+	{
+        if (isEmpty()) 
+        {
+        return 0;
+        }
         return subTreeHeight(node.left) - subTreeHeight(node.right);
     }
     
@@ -238,15 +244,21 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      * @param node: the root of the subtree
      * @return the height of the subtree with "node" as a root
      */
-    private int subTreeHeight(Treenode<T> node) {
-        if (node == null) return 0;
+    private int subTreeHeight(Treenode<T> node) 
+    {
+        if (node == null) 
+        {
+            return 0;
+        }
         return 1 + Math.max(subTreeHeight(node.left), subTreeHeight(node.right));
     }
 
 	/**
 	 * Inserts a new node with item as its key in the correct position
 	 */
-	public void insert(T item) {
+	public void insert(T item) 
+	{
+	    //https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 		//TODO if item is null throw IllegalArgumentException, 
 		// otherwise insert into balanced search tree
 	}
@@ -254,7 +266,8 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * If the tree contains a node with item as its key, remove it from the tree and rebalance
 	 */
-	public void delete(T item) {
+	public void delete(T item) 
+	{
 		//TODO if item is null or not found in tree, return without error
 		// else remove this item key from the tree and rebalance
 
