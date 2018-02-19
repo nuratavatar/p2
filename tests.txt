@@ -1,0 +1,37 @@
+tests.txt
+================================================================
+p2 Part A: Additional Tests to implement for p2
+Name: your name here
+
+08 test08_isEmpty_after_one_insert_and_delete()
+	*Checks to make sure that isEmpty returns true after inserting and subsequently*
+	*removing an element from an empty tree*
+
+09 test09_height_after_many_insertions()
+	*Inserts many elements into tree and checks height after each insert to make sure*
+	*it is correctly kept track of*
+
+10 test10_ascending_after_many_insertions()
+	*Inserts each element of the alphabet into the tree in randomized order*
+	*Make sure the tree returns a string of the alphabet in correct order and format*
+
+11 test11_isEmpty_after_many_insertions_and_removes()
+	*Inserts many elements into array and removes all elements, checks to make sure isEmpty*
+	*correctly returns true*
+
+12 test12_ascending_with_many_integers()
+	*Inserts integers instead of strings and checks to make sure that inAscendingOrder*
+	*returns all elements in expected order and format*
+
+13 test13_insert_null_exception()
+	*Checks to make sure that inserting a null element throws an IllegalArgumentException*
+
+14 test14_delete_element_not_in_tree()
+	*Tries to delete an element that is not in the tree, makes sure that program doesn't crash*
+
+15 test15_lookup_element_in_tree()
+	*Inserts an element into tree and calls lookup on that element, checks to make sure that the*
+	*result is true*
+
+16 test16_lookup_element_not_in_tree()
+	*Calls lookup on an empty tree and makes sure that the result is true (and the program doesn't crash)*
