@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -120,11 +122,26 @@ public class TestSearchTree {
 	}
 	
 	@Test
-	/** */
+	/** tests the IllegalArgumentException that should be thrown from 
+	 * the insert method when attempting to insert a null value*/
 	public void test08_insert_IllegalArgumentException() {
 	    try {
 	        tree.insert(null);
+	        fail("expected: IllegalArgumentException actual: no Exception");
+	    } catch (IllegalArgumentException e) {
+	        
+	    }
 	}
+	@Test
+	/** tests the isEmpty() method for before anything is inserted and after
+	 * a value are inserted*/
+	public void test09_isEmpty() {
+	    if (tree.isEmpty() == false) fail("expected: true actual: false");
+	    tree.insert("B");
+	    if (tree.isEmpty() == true) fail("expected: false actual: true");
+	}
+	
+	
 
 }
 
