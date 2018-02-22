@@ -241,7 +241,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
     @SuppressWarnings("unchecked")
     public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
-	    //https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 		//TODO if item is null throw IllegalArgumentException, 
 		// otherwise insert into balanced search tree
 	    if(item == null)
