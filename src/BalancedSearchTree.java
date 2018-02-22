@@ -39,7 +39,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    K key; //treenode key
         Treenode<K> left; //left child
         Treenode<K> right; //right child
-        
+        Treenode<K> parent; //parent node
         /**
          * Basic treenode constructor
          * @param item: key
@@ -256,11 +256,65 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * Inserts a new node with item as its key in the correct position
 	 */
-	public void insert(T item) 
+	public void insert(T item) throws IllegalArgumentException
 	{
 	    //https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 		//TODO if item is null throw IllegalArgumentException, 
 		// otherwise insert into balanced search tree
+	    if(item == null)
+	    {
+	        throw new IllegalArgumentException();
+	    }
+	    if(this.isEmpty())
+        {
+            root = new Treenode(item);
+        }
+	    insertHelper(item, root);
+	}
+	
+	/**
+	 * Helper method for BST insertion algorithm
+	 * @param item: item to be inserted
+	 * @param currNode: the current node the algorith is on
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+    public void insertHelper(T item, Treenode<T> currNode)
+	{
+	    
+	    if(item.compareTo(currNode.key) < 0)
+	    {
+	        if(currNode.left == null)
+	        {
+	            Treenode<T> newNode = new Treenode(item);
+	            currNode.left = newNode;
+	            newNode.parent = currNode;
+	        }
+	        else
+	        {
+	            insertHelper(item, currNode.left);
+	        }
+	    }
+	    else
+	    {
+	        if(currNode.right == null)
+	        {
+	            Treenode<T> newNode = new Treenode(item);
+	            currNode.right = newNode;
+	            newNode.parent = currNode;
+	        }
+	        else
+	        {
+	            insertHelper(item, currNode.right);
+	        }
+	    }
+	}
+	
+	public void balanceHelper(Treenode<T> currNode)
+	{
+	    if(Math.abs(this.balanceFactor(currNode)) > 1)
+	    {
+	        
+	    }
 	}
 
 	/**
