@@ -118,6 +118,13 @@ public class TestSearchTree {
 		if (! expected.equals(actual))
 			fail("expected: "+expected+ " actual: "+actual);
 	}
+	
+	@Test
+	/** */
+	public void test08_insert_IllegalArgumentException() {
+	    try {
+	        tree.insert(null);
+	}
 
 }
 
