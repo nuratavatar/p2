@@ -155,27 +155,10 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         }
         else
         {
-            return Math.max(heightHelper(root.right), heightHelper(root.left));
+            return Math.max(subTreeHeight(root.right), subTreeHeight(root.left));
         }
     }
     
-	/**
-	 * Helper method for height
-	 * @param node
-	 * @return
-	 */
-    private int heightHelper(Treenode<T> node) 
-    {
-        if (node == null) 
-        {
-            return 0;
-        }
-        else 
-        {
-            return 1 + Math.max(heightHelper(node.right), heightHelper(node.left));
-        }
-    }
-
 	/**
 	 * Returns true if the tree contains a node with item as its key
 	 */
@@ -229,7 +212,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * @param node: the node in question
 	 * @return the balance factor of node
 	 */
-	@SuppressWarnings("unused")
     private int balanceFactor(Treenode<T> node) 
 	{
         if (isEmpty()) 
@@ -256,7 +238,8 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * Inserts a new node with item as its key in the correct position
 	 */
-	public void insert(T item) throws IllegalArgumentException
+	@SuppressWarnings({"unchecked", "rawtypes"})
+    public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
 	    //https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 		//TODO if item is null throw IllegalArgumentException, 
@@ -264,6 +247,10 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    if(item == null)
 	    {
 	        throw new IllegalArgumentException();
+	    }
+	    else if(this.lookup(item))
+	    {
+	        throw new DuplicateKeyException();
 	    }
 	    if(this.isEmpty())
         {
@@ -309,12 +296,25 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    }
 	}
 	
-	public void balanceHelper(Treenode<T> currNode)
+	/**
+	 * travels up the tree from a recently added node
+	 * to find the first unbalanced node if one exists
+	 * @param currNode
+	 */
+	public Treenode<T> balanceHelper(Treenode<T> newNode)
 	{
-	    if(Math.abs(this.balanceFactor(currNode)) > 1)
+	    
+	    while(true)
 	    {
 	        
 	    }
+	}
+	/**
+	 * @param unbalancedNode
+	 */
+	public void balanceTree(Treenode<T> unbalancedNode)
+	{
+	    
 	}
 
 	/**
