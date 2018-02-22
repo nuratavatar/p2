@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.After;
@@ -141,7 +142,92 @@ public class TestSearchTree {
 	    if (tree.isEmpty() == true) fail("expected: false actual: true");
 	}
 	
+	@Test
+	/** tests lookup(T item) by inserting varying amounts of nodes and then
+	 *  looking it up*/
+	public void test10_lookup_functionality() {
+	    if (tree.lookup("Banana")) fail("expected: false actual: true");
+	    tree.insert("Apple");
+	    tree.insert("Peach");
+	    tree.insert("Plum");
+	    tree.insert("Orange");
+	    if (tree.lookup("Banana")) fail("expected: false actual: true");
+	    if (!tree.lookup("Peach")) fail("expected: true actual: false");
+	    if (!tree.lookup("Orange")) fail("expected: false actual: true");
+	}
 	
+	@Test
+	/** tests the IllegalArgumentException that should be thrown from
+	 * the delete method when attempting to insert a null value*/
+	public void test11_delete_IllegalArgumentException() {
+	    try {
+	        tree.delete(null);
+	        fail("expected: IllegalArgumentException actual: no Exception");
+	    } catch (IllegalArgumentException e) {
+	        
+	    }
+	}
 
+	@Test
+	/** tests delete(T item) by inserting varying nodes and deleting one 
+	 * and then trying to look it up*/
+	public void test12_delete_existing_item() {
+	    tree.insert("Apple");
+        tree.insert("Peach");
+        tree.insert("Plum");
+        tree.insert("Orange");
+        tree.delete("Plum");
+        if (tree.lookup("Plum")) fail("expected: false actual: true");
+	}
+	
+	@Test
+	/** tests inAscendingOrder() by creating a shadow array of the
+	 *  values added and sorting that array independently. What is 
+	 *  returned by inAscendingOrder() (after parsed by commas) should match 
+	 *  the sorted array's contents */
+	public void test13_inAscendingOrder() {
+	    Random rand = new Random();
+	    ArrayList<String> arr = new ArrayList<String>();
+	    for (int i = 0; i < 2000; i++) arr.add(i + "");
+	    
+	    for (int i = 0; i < 2000; i++) {
+	        tree.insert(arr.remove(rand.nextInt(arr.size())));
+	    }
+	    
+	    String orderedString = tree.inAscendingOrder();
+	    orderedString = orderedString.substring(0, orderedString.length()-1); 
+	    // gets rid of ending comma
+	    
+	    String[] ordered = orderedString.split(",");
+	    boolean worked = true;
+	    for (int i = 1; i < ordered.length; i++) {
+	        if (ordered[i-1].compareTo(ordered[i]) > 0) worked = false;
+	    }
+	    if (!worked) fail("expected: sorted order of elements actual: "
+	            + "unsorted order of elements");
+	}
+	
+	@Test
+	/** tests height() by inserting varying amounts of predetermined 
+	 * nodes with a known structure outcome and testing the expected 
+	 * and returned value of height*/
+	public void test14_height_functionality() {
+	    int height = tree.height();
+	    if (height != 0) fail("expected: 0 actual " + height);
+	    tree.insert("Peach");
+	    height = tree.height();
+	    if (height != 1) fail("expected: 1 actual " + height);
+	    tree.insert("Pear");
+	    tree.insert("Apple");
+	    tree.insert("Carrot");
+	    tree.insert("Orange");
+	    tree.insert("Zucchini");
+	    tree.insert("Salmon");
+	    tree.insert("Bacon");
+	    // written down for correct rotations
+	    
+	    height = tree.height();
+	    if (height != 4) fail("expected: 4 actual " + height);
+	}
 }
 
