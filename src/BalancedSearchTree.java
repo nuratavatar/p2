@@ -63,36 +63,36 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	}
 	
 	/**
+     * Method used to rebalance tree
+     * Rotates nodes one to the right with "a" as a focal point
+     * @param b, the node we are rotating from
+     */
+    @SuppressWarnings("unused")
+    private void rotateRight(Treenode<T> b)
+    {
+        Treenode<T> a = b.left;
+        a.right = b.left;
+        a.right = b;
+        if(b.equals(root))
+        {
+            root = a;
+        }
+    }
+
+    /**
 	 * Method used to rebalance tree
 	 * Rotates nodes one to the right with "b" as a focal point
 	 * @param b, the node we are rotating from
 	 */
 	@SuppressWarnings("unused")
-    private void rotateRight(Treenode<T> b)
+    private void rotateLeft(Treenode<T> a)
 	{
-	    Treenode<T> a = b.right;
+	    Treenode<T> b = a.right;
 	    b.left = a.right;
 	    a.right = b;
 	    if(b.equals(root))
 	    {
 	        root = a;
-	    }
-	}
-	
-	/**
-     * Method used to rebalance tree
-     * Rotates nodes one to the left with "a" as a focal point
-     * @param a, the node we are rotating from
-     */
-	@SuppressWarnings("unused")
-	private void rotateLeft(Treenode<T> a)
-	{
-	    Treenode<T> b = a.left;
-	    a.right = b.left;
-	    b.left = a;
-	    if(a.equals(root))
-	    {
-	        root = b;
 	    }
 	}
 	
@@ -238,7 +238,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * Inserts a new node with item as its key in the correct position
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("unchecked")
     public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
 	    //https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
@@ -303,10 +303,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
 	public Treenode<T> balanceHelper(Treenode<T> newNode)
 	{
-	    
+	    Treenode<T> current = newNode.parent;
 	    while(true)
 	    {
-	        
+	        if(Math.abs(this.balanceFactor(current)) > 1)
+	        {
+	            
+	        }
 	    }
 	}
 	/**
