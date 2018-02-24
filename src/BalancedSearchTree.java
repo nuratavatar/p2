@@ -68,7 +68,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      * @param b, the node we are rotating from
      */
     @SuppressWarnings("unused")
-    private void rotateRight(Treenode<T> b)
+    private Treenode<T> rotateRight(Treenode<T> b)
     {
         Treenode<T> a = b.left;
         a.right = b.left;
@@ -77,6 +77,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         {
             root = a;
         }
+        return a;
     }
 
     /**
@@ -85,15 +86,16 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * @param b, the node we are rotating from
 	 */
 	@SuppressWarnings("unused")
-    private void rotateLeft(Treenode<T> a)
+    private Treenode<T> rotateLeft(Treenode<T> a)
 	{
 	    Treenode<T> b = a.right;
 	    b.left = a.right;
 	    a.right = b;
-	    if(b.equals(root))
+	    if(a.equals(root))
 	    {
-	        root = a;
+	        root = b;
 	    }
+	    return b;
 	}
 	
 	/**
@@ -197,7 +199,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Returns the balance factor of the root
 	 * @return balance factor of root
 	 */
-	@SuppressWarnings("unused")
 	private int balanceFactor() 
 	{
         if (isEmpty())
@@ -214,7 +215,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     private int balanceFactor(Treenode<T> node) 
 	{
-        if (isEmpty()) 
+        if (node == null) 
         {
         return 0;
         }
@@ -241,7 +242,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
     @SuppressWarnings("unchecked")
     public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
-		//TODO if item is null throw IllegalArgumentException, 
+		//if item is null throw IllegalArgumentException, 
 		// otherwise insert into balanced search tree
 	    if(item == null)
 	    {
@@ -256,6 +257,8 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
             root = new Treenode(item);
         }
 	    insertHelper(item, root);
+	    
+	    
 	}
 	
 	/**
@@ -264,7 +267,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * @param currNode: the current node the algorith is on
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-    public void insertHelper(T item, Treenode<T> currNode)
+    public Treenode<T> insertHelper(T item, Treenode<T> currNode)
 	{
 	    
 	    if(item.compareTo(currNode.key) < 0)
@@ -274,6 +277,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.left = newNode;
 	            newNode.parent = currNode;
+	            return newNode;
 	        }
 	        else
 	        {
@@ -287,12 +291,39 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.right = newNode;
 	            newNode.parent = currNode;
+	            return newNode;
 	        }
 	        else
 	        {
 	            insertHelper(item, currNode.right);
 	        }
 	    }
+	    
+	    int balance = this.balanceFactor(currNode);
+	    //insertion at right right
+        if(balance < -1 && item.compareTo(currNode.right.key) > 0)
+        {
+            return rotateLeft(currNode);
+        }
+	    //insertion at left left
+	    if(balance > 1 && item.compareTo(currNode.left.key) < 0)
+	    {
+	        return rotateRight(currNode);
+	    }
+	    //insertion at right left
+	    if(balance < -1 && item.compareTo(currNode.right.key) < 0)
+	    {
+	        currNode.right = rotateRight(currNode.right);
+	        return rotateLeft(currNode);
+	    }
+	    //insertion at left right
+	    if(balance > 1 && item.compareTo(currNode.left.key) > 0)
+	    {
+	        currNode.left = rotateLeft(currNode.left);
+	        return rotateRight(currNode);
+	    }
+	    
+	    return currNode;
 	}
 	
 	/**
