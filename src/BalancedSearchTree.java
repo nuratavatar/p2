@@ -330,14 +330,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    
 	    return currNode;
 	}
-	
-	/**
-	 * @param unbalancedNode
-	 */
-	public void balanceTree(Treenode<T> unbalancedNode)
-	{
-	    
-	}
 
 	/**
 	 * If the tree contains a node with item as its key, remove it from the tree and rebalance
