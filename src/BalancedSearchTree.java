@@ -101,14 +101,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    b.left = a;
 	    //swapping Y's parent
 	    a.right = Y;
-	    if(a.right == null)
-	    {
-	        System.out.println(a.key + " has no right child");
-	    }
-	    else
-	    {
-	        System.out.println(a.key + ".right = " + a.right.key);
-	    }
 	    //reassigning root
 	    if(a.equals(root))
 	    {
@@ -264,7 +256,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         }
 	    else
         {
-        insertHelper(item, root);
+	        insertHelper(item, root);
         }
 	    numNodes++;
 	    
@@ -278,33 +270,33 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	@SuppressWarnings({"unchecked", "rawtypes"})
     public Treenode<T> insertHelper(T item, Treenode<T> currNode)
 	{
-	    
+	    //the node has been inserted
+	    if(currNode.key == item)
+	    {
+	        return null;
+	    }
 	    if(item.compareTo(currNode.key) < 0)
 	    {
 	        if(currNode.left == null)
 	        {
-	            System.out.println(item + " is the left child of " + currNode.key);
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.left = newNode;
-	            return newNode;
 	        }
 	        else
 	        {
-	            insertHelper(item, currNode.left);
+	            currNode.left = insertHelper(item, currNode.left);
 	        }
 	    }
 	    else
 	    {
 	        if(currNode.right == null)
 	        {
-	            System.out.println(item + " is the right child of " + currNode.key);
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.right = newNode;
-	            return newNode;
 	        }
 	        else
 	        {
-	            insertHelper(item, currNode.right);
+	            currNode.right = insertHelper(item, currNode.right);
 	        }
 	    }
 	    
@@ -362,6 +354,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	public static void main(String args[])
 	{
 	    BalancedSearchTree<String> avl = new BalancedSearchTree<String>();
+//	    avl.insert("orange");
 	    avl.insert("orange");
 	    avl.insert("poo");
 	    avl.insert("zoo");
@@ -370,8 +363,9 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    avl.insert("zoz");
 	    avl.insert("zpz");
 	    avl.insert("zqz");
-	    System.out.println(avl.inAscendingOrder());
-//	    System.out.println(avl.root.right.right.left.key);
+//	    System.out.println(avl.inAscendingOrder());
+//	    System.out.println(avl.lookup("orange"));
+	    System.out.println(avl.height());
 	}
 
 }
