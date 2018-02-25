@@ -168,7 +168,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         }
         else
         {
-            return Math.max(subTreeHeight(root.right), subTreeHeight(root.left));
+            return 1 + Math.max(subTreeHeight(root.right), subTreeHeight(root.left));
         }
     }
     
