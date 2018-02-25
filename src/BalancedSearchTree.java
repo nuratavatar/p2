@@ -39,7 +39,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    K key; //treenode key
         Treenode<K> left; //left child
         Treenode<K> right; //right child
-        Treenode<K> parent; //parent node
         /**
          * Basic treenode constructor
          * @param item: key
@@ -69,6 +68,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      */
     private Treenode<T> rotateRight(Treenode<T> b)
     {
+        System.out.println("right rotate on: " + b.key);
         //a is the node to the left of the root that will become the new root
         Treenode<T> a = b.left;
         //Y is the subtree that switches parents in rotations (the middle one)
@@ -92,6 +92,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     private Treenode<T> rotateLeft(Treenode<T> a)
 	{
+        System.out.println("left rotate on: " + a.key);
         //b is the node to the right of the root that will become the new root
 	    Treenode<T> b = a.right;
 	    //Y is the subtree that must swap parents
@@ -100,6 +101,14 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    b.left = a;
 	    //swapping Y's parent
 	    a.right = Y;
+	    if(a.right == null)
+	    {
+	        System.out.println(a.key + " has no right child");
+	    }
+	    else
+	    {
+	        System.out.println(a.key + ".right = " + a.right.key);
+	    }
 	    //reassigning root
 	    if(a.equals(root))
 	    {
@@ -205,18 +214,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
             return found;
         }
     }
-	/**
-	 * Returns the balance factor of the root
-	 * @return balance factor of root
-	 */
-	private int balanceFactor() 
-	{
-        if (isEmpty())
-        {
-        return 0;
-        }
-        return subTreeHeight(root.left) - subTreeHeight(root.right);
-    }
     
 	/**
 	 * Returns the balance factor of a given node
@@ -286,9 +283,9 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    {
 	        if(currNode.left == null)
 	        {
+	            System.out.println(item + " is the left child of " + currNode.key);
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.left = newNode;
-	            newNode.parent = currNode;
 	            return newNode;
 	        }
 	        else
@@ -300,9 +297,9 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    {
 	        if(currNode.right == null)
 	        {
+	            System.out.println(item + " is the right child of " + currNode.key);
 	            Treenode<T> newNode = new Treenode(item);
 	            currNode.right = newNode;
-	            newNode.parent = currNode;
 	            return newNode;
 	        }
 	        else
@@ -343,22 +340,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	}
 	
 	/**
-	 * travels up the tree from a recently added node
-	 * to find the first unbalanced node if one exists
-	 * @param currNode
-	 */
-	public Treenode<T> balanceHelper(Treenode<T> newNode)
-	{
-	    Treenode<T> current = newNode.parent;
-	    while(true)
-	    {
-	        if(Math.abs(this.balanceFactor(current)) > 1)
-	        {
-	            
-	        }
-	    }
-	}
-	/**
 	 * @param unbalancedNode
 	 */
 	public void balanceTree(Treenode<T> unbalancedNode)
@@ -384,10 +365,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    avl.insert("orange");
 	    avl.insert("poo");
 	    avl.insert("zoo");
+	    avl.insert("ox");
+	    avl.insert("zac");
+	    avl.insert("zoz");
+	    avl.insert("zpz");
+	    avl.insert("zqz");
 	    System.out.println(avl.inAscendingOrder());
-//	    System.out.println(avl.root.left.key);
-//	    System.out.println(avl.root.key);
-//	    System.out.println(avl.root.right.key);
+//	    System.out.println(avl.root.right.right.left.key);
 	}
 
 }
