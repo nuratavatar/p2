@@ -68,7 +68,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      */
     private Treenode<T> rotateRight(Treenode<T> b)
     {
-        System.out.println("right rotate on: " + b.key);
+//        System.out.println("right rotate on: " + b.key); // for testing
         //a is the node to the left of the root that will become the new root
         Treenode<T> a = b.left;
         //Y is the subtree that switches parents in rotations (the middle one)
@@ -92,7 +92,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     private Treenode<T> rotateLeft(Treenode<T> a)
 	{
-        System.out.println("left rotate on: " + a.key);
+//        System.out.println("left rotate on: " + a.key); // for testing
         //b is the node to the right of the root that will become the new root
 	    Treenode<T> b = a.right;
 	    //Y is the subtree that must swap parents
@@ -304,26 +304,26 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    //insertion at right right
         if(balance < -1 && item.compareTo(currNode.right.key) > 0)
         {
-            System.out.println("right right");
+//            System.out.println("right right"); // for testing
             return rotateLeft(currNode);
         }
 	    //insertion at left left
 	    if(balance > 1 && item.compareTo(currNode.left.key) < 0)
 	    {
-	        System.out.println("left left");
+//	        System.out.println("left left"); // for testing
 	        return rotateRight(currNode);
 	    }
 	    //insertion at right left
 	    if(balance < -1 && item.compareTo(currNode.right.key) < 0)
 	    {
-	        System.out.println("right left");
+//	        System.out.println("right left"); // for testing
 	        currNode.right = rotateRight(currNode.right);
 	        return rotateLeft(currNode);
 	    }
 	    //insertion at left right
 	    if(balance > 1 && item.compareTo(currNode.left.key) > 0)
 	    {
-	        System.out.println("left right");
+//	        System.out.println("left right"); // for testing
 	        currNode.left = rotateLeft(currNode.left);
 	        return rotateRight(currNode);
 	    }
