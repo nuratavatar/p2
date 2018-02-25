@@ -67,12 +67,17 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      * Rotates nodes one to the right with "a" as a focal point
      * @param b, the node we are rotating from
      */
-    @SuppressWarnings("unused")
     private Treenode<T> rotateRight(Treenode<T> b)
     {
+        //a is the node to the left of the root that will become the new root
         Treenode<T> a = b.left;
-        a.right = b.left;
+        //Y is the subtree that switches parents in rotations (the middle one)
+        Treenode<T> Y = a.right; 
+        //assigning b as the right child of the new root
         a.right = b;
+        //swapping Y's parent
+        b.left = Y;
+        //reassigning root
         if(b.equals(root))
         {
             root = a;
@@ -85,12 +90,17 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Rotates nodes one to the right with "b" as a focal point
 	 * @param b, the node we are rotating from
 	 */
-	@SuppressWarnings("unused")
     private Treenode<T> rotateLeft(Treenode<T> a)
 	{
+        //b is the node to the right of the root that will become the new root
 	    Treenode<T> b = a.right;
-	    b.left = a.right;
-	    a.right = b;
+	    //Y is the subtree that must swap parents
+	    Treenode<T> Y = b.left;
+	    //assigning a as b's left child
+	    b.left = a;
+	    //swapping Y's parent
+	    a.right = Y;
+	    //reassigning root
 	    if(a.equals(root))
 	    {
 	        root = b;
@@ -120,12 +130,12 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         String result = "";
         if (node.left != null) 
         {
-        result = ascendingHelper(node.left);
+            result = ascendingHelper(node.left);
         }
         result += node.key.toString() + ",";
         if (node.right != null)
         {
-        result += ascendingHelper(node.right);
+            result += ascendingHelper(node.right);
         }
         return result;
     }
@@ -239,7 +249,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	/**
 	 * Inserts a new node with item as its key in the correct position
 	 */
-    @SuppressWarnings("unchecked")
     public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
 		//if item is null throw IllegalArgumentException, 
@@ -254,10 +263,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    }
 	    if(this.isEmpty())
         {
-            root = new Treenode(item);
+            root = new Treenode<T>(item);
         }
-	    insertHelper(item, root);
-	    
+	    else
+        {
+        insertHelper(item, root);
+        }
+	    numNodes++;
 	    
 	}
 	
@@ -303,22 +315,26 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    //insertion at right right
         if(balance < -1 && item.compareTo(currNode.right.key) > 0)
         {
+            System.out.println("right right");
             return rotateLeft(currNode);
         }
 	    //insertion at left left
 	    if(balance > 1 && item.compareTo(currNode.left.key) < 0)
 	    {
+	        System.out.println("left left");
 	        return rotateRight(currNode);
 	    }
 	    //insertion at right left
 	    if(balance < -1 && item.compareTo(currNode.right.key) < 0)
 	    {
+	        System.out.println("right left");
 	        currNode.right = rotateRight(currNode.right);
 	        return rotateLeft(currNode);
 	    }
 	    //insertion at left right
 	    if(balance > 1 && item.compareTo(currNode.left.key) > 0)
 	    {
+	        System.out.println("left right");
 	        currNode.left = rotateLeft(currNode.left);
 	        return rotateRight(currNode);
 	    }
@@ -361,6 +377,19 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 		// NOTE: if you are unable to get delete implemented
 		// it will be at most 5% of the score for this program assignment
 	}
+	
+	public static void main(String args[])
+	{
+	    BalancedSearchTree<String> avl = new BalancedSearchTree<String>();
+	    avl.insert("orange");
+	    avl.insert("poo");
+	    avl.insert("zoo");
+	    System.out.println(avl.inAscendingOrder());
+//	    System.out.println(avl.root.left.key);
+//	    System.out.println(avl.root.key);
+//	    System.out.println(avl.root.right.key);
+	}
 
 }
+
 
