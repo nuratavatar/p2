@@ -60,7 +60,16 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 			this.right = right;
 		}
 	}
-	
+	private Treenode<T> minDescendant(Treenode<T> node)
+	{
+	    while(node.left != null)
+	    {
+//	        System.out.println("stuck in the middle with you"); // for testing
+            node = node.left;
+	    }
+	    return node;
+	        
+	}
 	/**
      * Method used to rebalance tree
      * Rotates nodes one to the right with "a" as a focal point
@@ -300,28 +309,28 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	        }
 	    }
 	    
-	    int balance = this.balanceFactor(currNode);
+	    int bal = this.balanceFactor(currNode);
 	    //insertion at right right
-        if(balance < -1 && item.compareTo(currNode.right.key) > 0)
+        if(bal < -1 && item.compareTo(currNode.right.key) > 0)
         {
 //            System.out.println("right right"); // for testing
             return rotateLeft(currNode);
         }
 	    //insertion at left left
-	    if(balance > 1 && item.compareTo(currNode.left.key) < 0)
+	    if(bal > 1 && item.compareTo(currNode.left.key) < 0)
 	    {
 //	        System.out.println("left left"); // for testing
 	        return rotateRight(currNode);
 	    }
 	    //insertion at right left
-	    if(balance < -1 && item.compareTo(currNode.right.key) < 0)
+	    if(bal < -1 && item.compareTo(currNode.right.key) < 0)
 	    {
 //	        System.out.println("right left"); // for testing
 	        currNode.right = rotateRight(currNode.right);
 	        return rotateLeft(currNode);
 	    }
 	    //insertion at left right
-	    if(balance > 1 && item.compareTo(currNode.left.key) > 0)
+	    if(bal > 1 && item.compareTo(currNode.left.key) > 0)
 	    {
 //	        System.out.println("left right"); // for testing
 	        currNode.left = rotateLeft(currNode.left);
@@ -330,19 +339,133 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    
 	    return currNode;
 	}
-
+	 
 	/**
 	 * If the tree contains a node with item as its key, remove it from the tree and rebalance
 	 */
 	public void delete(T item) 
 	{
-		//TODO if item is null or not found in tree, return without error
-		// else remove this item key from the tree and rebalance
-
-		// NOTE: if you are unable to get delete implemented
-		// it will be at most 5% of the score for this program assignment
+	    if(item == null)
+	    {
+	        throw new IllegalArgumentException();
+	    }
+		if(lookup(item))
+		{
+		    deleteHelper(item, root);
+		}
+		
+		
 	}
-	
+	public Treenode<T> deleteHelper(T item, Treenode<T> currNode)
+	{
+	    if(item == null)
+	    {
+	        return currNode;
+	    }
+	    if(item.compareTo(currNode.key) < 0)
+	    {
+//	        System.out.println("left");
+	        currNode.left = deleteHelper(item, currNode.left);
+	    }
+	    else if(item.compareTo(currNode.key) > 0)
+	    {
+//	        System.out.println("right");
+	        currNode.right = deleteHelper(item, currNode.right);
+	    }
+	    else
+	    {
+//	        System.out.println("reached");
+	        if(currNode.left == null && root.right == null)
+	        {
+//	            System.out.println("deleted");
+	            currNode = null;
+	            return currNode;
+	        }
+	        else if(currNode.left == null || currNode.right == null)
+	        {
+//	            System.out.println("second case");
+	            if(currNode.left == null)
+	            {
+//	                System.out.println("deleted");
+	                currNode = null;
+	            }
+	            else
+	            {
+//	                System.out.println("deleted");
+	                currNode = null;
+	            }
+	        }
+	        else
+	        {
+//	            System.out.println("third case");
+	            Treenode<T> descendant =  this.minDescendant(currNode);
+	            System.out.println("Descendant: " + descendant.key);
+	            currNode.key = descendant.key;
+	            this.deleteHelper(descendant.key, descendant);
+	        }
+	        int bal = this.balanceFactor(currNode);
+	      //insertion at right right
+	        if(bal < -1 && item.compareTo(currNode.right.key) > 0)
+	        {
+//	            System.out.println("right right"); // for testing
+	            return rotateLeft(currNode);
+	        }
+	        //insertion at left left
+	        if(bal > 1 && item.compareTo(currNode.left.key) < 0)
+	        {
+//	          System.out.println("left left"); // for testing
+	            return rotateRight(currNode);
+	        }
+	        //insertion at right left
+	        if(bal < -1 && item.compareTo(currNode.right.key) < 0)
+	        {
+//	          System.out.println("right left"); // for testing
+	            currNode.right = rotateRight(currNode.right);
+	            return rotateLeft(currNode);
+	        }
+	        //insertion at left right
+	        if(bal > 1 && item.compareTo(currNode.left.key) > 0)
+	        {
+//	          System.out.println("left right"); // for testing
+	            currNode.left = rotateLeft(currNode.left);
+	            return rotateRight(currNode);
+	        }
+	        
+	        return currNode;
+	    }
+	    return currNode;
+	}
+	private void printLevel(Treenode<T> currentNode, int level)
+	{
+	    if(!(currentNode == null))
+	    {
+	        if(level == 1)
+	        {
+	            System.out.print(currentNode.key + " ");
+	        }
+	        else
+	        {
+	            printLevel(currentNode.left, level-1);
+	            printLevel(currentNode.right, level-1);
+	        }
+	    }
+	    else
+	    {
+	        System.out.print("null ");
+	    }
+	}
+	private void printTree()
+	{
+	    int currentLevel = 1;
+	    int treeHeight = this.height();
+	    while(currentLevel <= this.height())
+	    {
+	        this.printLevel(root, currentLevel);
+	        currentLevel++;
+	        System.out.println();
+	    }
+	   
+	}
 	public static void main(String args[])
 	{
 	    BalancedSearchTree<String> avl = new BalancedSearchTree<String>();
@@ -355,9 +478,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    avl.insert("zoz");
 	    avl.insert("zpz");
 	    avl.insert("zqz");
-//	    System.out.println(avl.inAscendingOrder());
+	    System.out.println(avl.inAscendingOrder());
+	    avl.printTree();
+	    avl.delete("zpz");
+	    System.out.println(avl.inAscendingOrder());
+	    avl.printTree();
 //	    System.out.println(avl.lookup("orange"));
-	    System.out.println(avl.height());
+//	    System.out.println(avl.height());
 	}
 
 }
