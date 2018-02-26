@@ -383,22 +383,22 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	        }
 	        else if(currNode.left == null || currNode.right == null)
 	        {
-//	            System.out.println("second case");
+	            System.out.println("second case");
 	            if(currNode.left == null)
 	            {
-//	                System.out.println("deleted");
-	                currNode = null;
+	                System.out.println("deleted1");
+	                currNode = currNode.right;
 	            }
 	            else
 	            {
-//	                System.out.println("deleted");
-	                currNode = null;
+	                System.out.println("deleted2");
+	                currNode = currNode.left;
 	            }
 	        }
 	        else
 	        {
 //	            System.out.println("third case");
-	            Treenode<T> descendant =  this.minDescendant(currNode);
+	            Treenode<T> descendant =  this.minDescendant(currNode.right);
 	            System.out.println("Descendant: " + descendant.key);
 	            currNode.key = descendant.key;
 	            this.deleteHelper(descendant.key, descendant);
