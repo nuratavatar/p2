@@ -64,7 +64,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	{
 	    while(node.left != null)
 	    {
-//	        System.out.println("stuck in the middle with you"); // for testing
             node = node.left;
 	    }
 	    return node;
@@ -77,7 +76,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      */
     private Treenode<T> rotateRight(Treenode<T> b)
     {
-//        System.out.println("right rotate on: " + b.key); // for testing
         //a is the node to the left of the root that will become the new root
         Treenode<T> a = b.left;
         //Y is the subtree that switches parents in rotations (the middle one)
@@ -101,7 +99,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     private Treenode<T> rotateLeft(Treenode<T> a)
 	{
-//        System.out.println("left rotate on: " + a.key); // for testing
         //b is the node to the right of the root that will become the new root
 	    Treenode<T> b = a.right;
 	    //Y is the subtree that must swap parents
@@ -249,25 +246,27 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     public void insert(T item) throws IllegalArgumentException, DuplicateKeyException
 	{
-		//if item is null throw IllegalArgumentException, 
-		// otherwise insert into balanced search tree
+		//Nodes can't have null keys
 	    if(item == null)
 	    {
 	        throw new IllegalArgumentException();
 	    }
+	    //Nodes can't have duplicate keys
 	    else if(this.lookup(item))
 	    {
 	        throw new DuplicateKeyException();
 	    }
+	    //If the tree is empty create a new node at the root with key "item"
 	    if(this.isEmpty())
         {
             root = new Treenode<T>(item);
         }
+	    //Otherwise call insertHelper
 	    else
         {
 	        insertHelper(item, root);
         }
-	    numNodes++;
+	    numNodes++; //increment numNodes
 	    
 	}
 	
@@ -275,8 +274,8 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 * Helper method for BST insertion algorithm
 	 * @param item: item to be inserted
 	 * @param currNode: the current node the algorith is on
+	 * @return currNode or the node that replaces currNode in the case of a rotation to fix balance
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
     public Treenode<T> insertHelper(T item, Treenode<T> currNode)
 	{
 	    //the node has been inserted
@@ -284,55 +283,60 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    {
 	        return null;
 	    }
+	    //traverse the tree to find the correct position to insert the node
+	    //going left
 	    if(item.compareTo(currNode.key) < 0)
 	    {
+	        //(base case) if we've reached a leaf, set the correct child to a newNode with "item" as its key
 	        if(currNode.left == null)
 	        {
-	            Treenode<T> newNode = new Treenode(item);
+	            Treenode<T> newNode = new Treenode<T>(item);
 	            currNode.left = newNode;
 	        }
+	        //(recursive case) otherwise, continue traversal
 	        else
 	        {
 	            currNode.left = insertHelper(item, currNode.left);
 	        }
 	    }
+	    //going right
 	    else
 	    {
+	        //(base case) if we've reached a leaf, set the correct child to a newNode with "item" as its key
 	        if(currNode.right == null)
 	        {
-	            Treenode<T> newNode = new Treenode(item);
+	            Treenode<T> newNode = new Treenode<T>(item);
 	            currNode.right = newNode;
 	        }
+	        //(recursive case) otherwise, continue traversal
 	        else
 	        {
 	            currNode.right = insertHelper(item, currNode.right);
 	        }
 	    }
 	    
+	    //Checking to see if the tree needs to be rebalanced
 	    int bal = this.balanceFactor(currNode);
+	    
 	    //insertion at right right
         if(bal < -1 && item.compareTo(currNode.right.key) > 0)
         {
-//            System.out.println("right right"); // for testing
             return rotateLeft(currNode);
         }
 	    //insertion at left left
 	    if(bal > 1 && item.compareTo(currNode.left.key) < 0)
 	    {
-//	        System.out.println("left left"); // for testing
 	        return rotateRight(currNode);
 	    }
 	    //insertion at right left
 	    if(bal < -1 && item.compareTo(currNode.right.key) < 0)
 	    {
-//	        System.out.println("right left"); // for testing
 	        currNode.right = rotateRight(currNode.right);
 	        return rotateLeft(currNode);
 	    }
 	    //insertion at left right
 	    if(bal > 1 && item.compareTo(currNode.left.key) > 0)
 	    {
-//	        System.out.println("left right"); // for testing
 	        currNode.left = rotateLeft(currNode.left);
 	        return rotateRight(currNode);
 	    }
@@ -345,60 +349,66 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
 	public void delete(T item) 
 	{
+	    //No nodes should have null keys
 	    if(item == null)
 	    {
 	        throw new IllegalArgumentException();
 	    }
+	    //Only delete if the given key is in the tree
 		if(lookup(item))
 		{
 		    deleteHelper(item, root);
+		    numNodes--; //decrement the variable
 		}
 		
 		
 	}
+	
+	/**
+	 * Helper method for delete
+	 * Performs normal BST insert then travels up the tree to rebalance
+	 * @param item: the key of the node we are deleting
+	 * @param currNode: the node that the helper method is currently checking
+	 * @return the current node or the node that replaces the current node if a rotation occurs
+	 */
 	public Treenode<T> deleteHelper(T item, Treenode<T> currNode)
 	{
+	    //Traversing tree to find the node with key "item"
 	    if(item.compareTo(currNode.key) < 0)
 	    {
-	        System.out.println("left");
 	        currNode.left = deleteHelper(item, currNode.left);
 	    }
 	    else if(item.compareTo(currNode.key) > 0)
 	    {
-//	        System.out.println("right");
 	        currNode.right = deleteHelper(item, currNode.right);
 	    }
+	    //Reached the node to be deleted
 	    else
 	    {
-	        System.out.println("reached");
+	        //Deleting a leaf node
 	        if(currNode.left == null && currNode.right == null)
 	        {
-	            System.out.println("Leaf Deleted");
-//	            System.out.println("deleted" + currNode.key + subTreeHeight(currNode));
 	            System.out.println();
 	            currNode = null;
-//	            printTree();
 	        }
+	        //Deleting a node with one child
 	        else if(currNode.left == null || currNode.right == null)
 	        {
-	            System.out.println("One Child Deleted");
 	            if(currNode.left == null)
 	            {
-	                System.out.println("deleted1");
 	                currNode = currNode.right;
 	                currNode.right = null;
 	            }
 	            else
 	            {
-	                System.out.println("deleted2");
 	                currNode = currNode.left;
 	                currNode.left = null;
 	            }
 
 	        }
+	        //Deleting an internal node
 	        else
 	        {
-	            System.out.println("Internal Deleted");
 	            Treenode<T> descendant =  this.minDescendant(currNode.right);
 	            currNode.key = descendant.key;
 	            System.out.println();
@@ -410,39 +420,38 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    }
 	    System.out.println("checking balance");
         int bal = this.balanceFactor(currNode);
-//        if(currNode != null)
-//        {
-//            System.out.println(bal + " " + currNode.key);
-//        }
-      //delete at right right
+        //right right
         if(bal < -1 && balanceFactor(currNode.right) <= 0)
         {
-//          System.out.println("right right"); // for testing
             return rotateLeft(currNode);
         }
-        //delete at left left
+        //left left
         if(bal > 1 && balanceFactor(currNode.left) >= 0)
         {
-//        System.out.println("left left"); // for testing
             return rotateRight(currNode);
         }
-        //delete at right left
+        //right left
         if(bal < -1 && balanceFactor(currNode.right) > 0)
         {
-//        System.out.println("right left"); // for testing
             currNode.right = rotateRight(currNode.right);
             return rotateLeft(currNode);
         }
-        //delete at left right
+        //left right
         if(bal > 1 && balanceFactor(currNode.left) < 0)
         {
-//        System.out.println("left right"); // for testing
             currNode.left = rotateLeft(currNode.left);
             return rotateRight(currNode);
         }
         
         return currNode;
 	}
+	
+	/**
+	 * Utility method for printTree method
+	 * Prints a level "level" of tree
+	 * @param currentNode: Starting node
+	 * @param level: Level of tree to print
+	 */
 	private void printLevel(Treenode<T> currentNode, int level)
 	{
 	    if(!(currentNode == null))
@@ -462,6 +471,11 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	        System.out.print("null ");
 	    }
 	}
+	
+	/**
+	 * print tree method for testing
+	 * prints each level of the tree on a separate line
+	 */
 	private void printTree()
 	{
 	    int currentLevel = 1;
@@ -474,27 +488,6 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    }
 	   
 	}
-	public static void main(String args[])
-	{
-	    BalancedSearchTree<String> avl = new BalancedSearchTree<String>();
-//	    avl.insert("orange");
-	    avl.insert("orange");
-	    avl.insert("poo");
-	    avl.insert("zoo");
-	    avl.insert("ox");
-	    avl.insert("zac");
-	    avl.insert("zoz");
-	    avl.insert("zpz");
-	    avl.insert("zqz");
-//	    System.out.println(avl.inAscendingOrder());
-	    avl.printTree();
-	    avl.delete("ox");
-//	    System.out.println(avl.inAscendingOrder());
-	    avl.printTree();
-//	    System.out.println(avl.lookup("orange"));
-//	    System.out.println(avl.height());
-	}
-
 }
 
 
