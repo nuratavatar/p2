@@ -24,13 +24,15 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
     protected int numNodes; //Keeps track of the number of nodes in the tree
     protected Treenode<T> root; //Keeps track of the tree's root node
     
+    /**
+     * Basic constructor, initializes numNodes
+     */
     public BalancedSearchTree() 
     {
         numNodes = 0;
     }
     
     /**
-     * @author tmand
      * Class for nodes in the binary search tree
      * @param <K> generic comparable object for key
      */
@@ -60,19 +62,29 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 			this.right = right;
 		}
 	}
+	
+	/**
+	 * Provides the minimum descendant node of a given node
+	 * @param node: the given node
+	 * @return the given nodes minimum descendant
+	 */
 	private Treenode<T> minDescendant(Treenode<T> node)
 	{
+	    //traverse left until you reach an node with no left child
 	    while(node.left != null)
 	    {
-            node = node.left;
+	      //the first node with no left child is the descendant with the lowest key
+            node = node.left; 
 	    }
 	    return node;
 	        
 	}
+	
 	/**
      * Method used to rebalance tree
      * Rotates nodes one to the right with "a" as a focal point
      * @param b, the node we are rotating from
+     * @return the node that replaces b after rotation
      */
     private Treenode<T> rotateRight(Treenode<T> b)
     {
@@ -89,13 +101,14 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
         {
             root = a;
         }
-        return a;
+        return a; //return the new root node of the subtree (or full tree if b is the root)
     }
 
     /**
 	 * Method used to rebalance tree
 	 * Rotates nodes one to the right with "b" as a focal point
 	 * @param b, the node we are rotating from
+	 * @return the new root of the subtree
 	 */
     private Treenode<T> rotateLeft(Treenode<T> a)
 	{
@@ -112,18 +125,20 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    {
 	        root = b;
 	    }
-	    return b;
+	    return b; //return the new root of the subtree
 	}
 	
 	/**
-	 * Returns a string containing the keys of each node in the tree in ascending order seperated by commas
+	 * @return a string containing the keys of each node in the tree in ascending order seperated by commas
 	 */
 	public String inAscendingOrder()
 	{
+	    //if the tree is empty return an empty string
 	    if (numNodes == 0)
 	    {
 	        return "";
 	    }
+	    //otherwise call the helper method
         return ascendingHelper(root);
     }
     
@@ -135,6 +150,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
     private String ascendingHelper(Treenode<T> node)
     {
         String result = "";
+        //follow in-order traversal algorithm
         if (node.left != null) 
         {
             result = ascendingHelper(node.left);
@@ -148,50 +164,59 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
     }
 
 	/**
-	 * Returns true if the tree is empty and false otherwise
+	 * @return true if the tree is empty and false otherwise
 	 */
 	public boolean isEmpty() 
 	{
+	    //if numNodes is 0 it's empty
         if (numNodes == 0) 
         {
-        return true;
+            return true;
         }
         return false;
     }
 
 	/**
-	 * Returns the height of the tree
+	 * @return height of the tree
 	 */
 	public int height() 
 	{
+	    //empty tree case
         if (isEmpty())
         {
         return 0;
         }
+        //only root case
         else if (root.right == null && root.left == null) 
         {
             return 1;
         }
+        //neither
         else
         {
+            //add the size of the maximum of the right and left subtrees to 1 for the root
             return 1 + Math.max(subTreeHeight(root.right), subTreeHeight(root.left));
         }
     }
     
 	/**
-	 * Returns true if the tree contains a node with item as its key
+	 * @return true if the tree contains a node with item as its key
 	 */
 	public boolean lookup(T item) {
+	    //nodes can't have null keys
 	    if (item == null) 
         {
 	        throw new IllegalArgumentException();
         }
+	    //there are no nodes
         if (isEmpty())
         {
             return false;
         }
         else 
         {
+            //perform a binary search tree traversal until you find a node with item as its key 
+            //and return true or you reach a leaf in which case return false
             Treenode<T> currNode = root;
             boolean found = false;
             while (!found && currNode != null) 
@@ -220,10 +245,12 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	 */
     private int balanceFactor(Treenode<T> node) 
 	{
+        //if the tree is empty the balance factor is 0
         if (node == null) 
         {
-        return 0;
+            return 0;
         }
+        //the balance factor is equal to the difference in heights of the left and right subtrees
         return subTreeHeight(node.left) - subTreeHeight(node.right);
     }
     
@@ -234,10 +261,12 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
      */
     private int subTreeHeight(Treenode<T> node) 
     {
+        //base case
         if (node == null) 
         {
             return 0;
         }
+        //recursive case
         return 1 + Math.max(subTreeHeight(node.left), subTreeHeight(node.right));
     }
 
@@ -456,16 +485,19 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	{
 	    if(!(currentNode == null))
 	    {
+	        //base case
 	        if(level == 1)
 	        {
 	            System.out.print(currentNode.key + " ");
 	        }
+	        //recursive case
 	        else
 	        {
 	            printLevel(currentNode.left, level-1);
 	            printLevel(currentNode.right, level-1);
 	        }
 	    }
+	    //to make it more readable
 	    else
 	    {
 	        System.out.print("null ");
@@ -480,11 +512,12 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	{
 	    int currentLevel = 1;
 	    int treeHeight = this.height();
+	    //print each level of the tree until you reach the last level
 	    while(currentLevel <= treeHeight)
 	    {
 	        this.printLevel(root, currentLevel);
 	        currentLevel++;
-	        System.out.println();
+	        System.out.println(); //seperate lines
 	    }
 	   
 	}
