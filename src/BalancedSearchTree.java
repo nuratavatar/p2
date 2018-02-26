@@ -388,11 +388,13 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	            {
 	                System.out.println("deleted1");
 	                currNode = currNode.right;
+	                currNode.right = null;
 	            }
 	            else
 	            {
 	                System.out.println("deleted2");
 	                currNode = currNode.left;
+	                currNode.left = null;
 	            }
 	        }
 	        else
@@ -458,7 +460,7 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	{
 	    int currentLevel = 1;
 	    int treeHeight = this.height();
-	    while(currentLevel <= this.height())
+	    while(currentLevel <= treeHeight)
 	    {
 	        this.printLevel(root, currentLevel);
 	        currentLevel++;
