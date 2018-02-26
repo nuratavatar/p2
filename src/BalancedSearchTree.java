@@ -358,13 +358,9 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	}
 	public Treenode<T> deleteHelper(T item, Treenode<T> currNode)
 	{
-	    if(item == null)
-	    {
-	        return currNode;
-	    }
 	    if(item.compareTo(currNode.key) < 0)
 	    {
-//	        System.out.println("left");
+	        System.out.println("left");
 	        currNode.left = deleteHelper(item, currNode.left);
 	    }
 	    else if(item.compareTo(currNode.key) > 0)
@@ -374,16 +370,18 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    }
 	    else
 	    {
-//	        System.out.println("reached");
-	        if(currNode.left == null && root.right == null)
+	        System.out.println("reached");
+	        if(currNode.left == null && currNode.right == null)
 	        {
-//	            System.out.println("deleted");
+	            System.out.println("Leaf Deleted");
+//	            System.out.println("deleted" + currNode.key + subTreeHeight(currNode));
+	            System.out.println();
 	            currNode = null;
-	            return currNode;
+//	            printTree();
 	        }
 	        else if(currNode.left == null || currNode.right == null)
 	        {
-	            System.out.println("second case");
+	            System.out.println("One Child Deleted");
 	            if(currNode.left == null)
 	            {
 	                System.out.println("deleted1");
@@ -396,46 +394,54 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	                currNode = currNode.left;
 	                currNode.left = null;
 	            }
+
 	        }
 	        else
 	        {
-//	            System.out.println("third case");
+	            System.out.println("Internal Deleted");
 	            Treenode<T> descendant =  this.minDescendant(currNode.right);
-	            System.out.println("Descendant: " + descendant.key);
 	            currNode.key = descendant.key;
-	            this.deleteHelper(descendant.key, descendant);
+	            System.out.println();
+                printTree();
+                System.out.println();
+	            currNode.right = deleteHelper(descendant.key, currNode.right);
+	            
 	        }
-	        int bal = this.balanceFactor(currNode);
-	      //insertion at right right
-	        if(bal < -1 && item.compareTo(currNode.right.key) > 0)
-	        {
-//	            System.out.println("right right"); // for testing
-	            return rotateLeft(currNode);
-	        }
-	        //insertion at left left
-	        if(bal > 1 && item.compareTo(currNode.left.key) < 0)
-	        {
-//	          System.out.println("left left"); // for testing
-	            return rotateRight(currNode);
-	        }
-	        //insertion at right left
-	        if(bal < -1 && item.compareTo(currNode.right.key) < 0)
-	        {
-//	          System.out.println("right left"); // for testing
-	            currNode.right = rotateRight(currNode.right);
-	            return rotateLeft(currNode);
-	        }
-	        //insertion at left right
-	        if(bal > 1 && item.compareTo(currNode.left.key) > 0)
-	        {
-//	          System.out.println("left right"); // for testing
-	            currNode.left = rotateLeft(currNode.left);
-	            return rotateRight(currNode);
-	        }
-	        
-	        return currNode;
 	    }
-	    return currNode;
+	    System.out.println("checking balance");
+        int bal = this.balanceFactor(currNode);
+//        if(currNode != null)
+//        {
+//            System.out.println(bal + " " + currNode.key);
+//        }
+      //delete at right right
+        if(bal < -1 && balanceFactor(currNode.right) <= 0)
+        {
+//          System.out.println("right right"); // for testing
+            return rotateLeft(currNode);
+        }
+        //delete at left left
+        if(bal > 1 && balanceFactor(currNode.left) >= 0)
+        {
+//        System.out.println("left left"); // for testing
+            return rotateRight(currNode);
+        }
+        //delete at right left
+        if(bal < -1 && balanceFactor(currNode.right) > 0)
+        {
+//        System.out.println("right left"); // for testing
+            currNode.right = rotateRight(currNode.right);
+            return rotateLeft(currNode);
+        }
+        //delete at left right
+        if(bal > 1 && balanceFactor(currNode.left) < 0)
+        {
+//        System.out.println("left right"); // for testing
+            currNode.left = rotateLeft(currNode.left);
+            return rotateRight(currNode);
+        }
+        
+        return currNode;
 	}
 	private void printLevel(Treenode<T> currentNode, int level)
 	{
@@ -480,10 +486,10 @@ public class BalancedSearchTree<T extends Comparable<T>> implements SearchTreeAD
 	    avl.insert("zoz");
 	    avl.insert("zpz");
 	    avl.insert("zqz");
-	    System.out.println(avl.inAscendingOrder());
+//	    System.out.println(avl.inAscendingOrder());
 	    avl.printTree();
-	    avl.delete("zpz");
-	    System.out.println(avl.inAscendingOrder());
+	    avl.delete("ox");
+//	    System.out.println(avl.inAscendingOrder());
 	    avl.printTree();
 //	    System.out.println(avl.lookup("orange"));
 //	    System.out.println(avl.height());
